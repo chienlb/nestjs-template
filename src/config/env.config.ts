@@ -7,4 +7,8 @@ export default () => ({
     password: process.env.POSTGRES_PASSWORD || '123456',
     database: process.env.POSTGRES_DB || 'nestjs_template',
   },
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+  },
 });

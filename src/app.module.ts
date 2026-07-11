@@ -6,6 +6,7 @@ import envConfig from './config/env.config';
 import { PrismaModule } from './database/postgre-sql/prisma.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { RedisModule } from './database/redis/redis.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { APP_GUARD } from '@nestjs/core';
       limit: 100,
     }]),
     PrismaModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [
