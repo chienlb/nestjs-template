@@ -13,17 +13,21 @@ import { RedisService } from './redis.service';
           host: configService.get<string>('redis.host'),
           port: configService.get<number>('redis.port'),
         });
-        
+
         client.on('connect', () => {
-          import('@nestjs/common').then(({ Logger }) => {
-            Logger.log('Successfully connected to Redis', 'RedisModule');
-          });
+          import('@nestjs/common')
+            .then(({ Logger }) => {
+              Logger.log('Successfully connected to Redis', 'RedisModule');
+            })
+            .catch((err) => console.error(err));
         });
 
         client.on('error', (err) => {
-          import('@nestjs/common').then(({ Logger }) => {
-            Logger.error('Redis connection error', err, 'RedisModule');
-          });
+          import('@nestjs/common')
+            .then(({ Logger }) => {
+              Logger.error('Redis connection error', err, 'RedisModule');
+            })
+            .catch((e) => console.error(e));
         });
 
         return client;

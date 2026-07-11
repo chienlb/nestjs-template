@@ -7,7 +7,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
-  const logger = new Logger("Server");
+  const logger = new Logger('Server');
   try {
     const app = await NestFactory.create(AppModule);
 
@@ -22,10 +22,12 @@ async function bootstrap() {
     });
 
     // 2. Global Validation Pipe
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      transform: true,
-    }));
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    );
 
     // 3. Global Interceptor & Filter
     app.useGlobalInterceptors(new TransformInterceptor());
@@ -53,4 +55,4 @@ async function bootstrap() {
     process.exit(1);
   }
 }
-bootstrap();
+void bootstrap();

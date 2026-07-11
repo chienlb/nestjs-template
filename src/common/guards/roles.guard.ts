@@ -17,8 +17,11 @@ export class RolesGuard implements CanActivate {
       return true; // No roles required, access granted
     }
 
-    const { user } = context.switchToHttp().getRequest();
-    
+    const request = context
+      .switchToHttp()
+      .getRequest<{ user?: { role: Role } }>();
+    const user = request.user;
+
     // In a real application, the user object will be attached to the request
     // by an Authentication Guard (e.g. JWT Guard) before this guard runs.
     // If there is no user, they cannot have the required roles.
