@@ -1,42 +1,42 @@
 # NestJS Template Project
 
-Mẫu dự án (Template) xây dựng trên nền tảng [NestJS](https://nestjs.com/) phiên bản mới nhất, được cấu hình sẵn các công cụ, thư viện và kiến trúc tốt nhất để bạn có thể bắt tay ngay vào việc phát triển tính năng.
+A modern project template built on top of [NestJS](https://nestjs.com/) featuring the latest tools, libraries, and best-practice architectures to help you kickstart your feature development immediately.
 
-## 🚀 Tính Năng Tích Hợp (Features)
+## 🚀 Features
 
-Template này đã được setup sẵn các module và công cụ sau:
+This template is pre-configured with the following modules and tools:
 
-- **Database (PostgreSQL + Prisma):** Quản lý cơ sở dữ liệu mạnh mẽ, có type-safe với Prisma ORM.
-- **Caching (Redis):** Tích hợp sẵn `ioredis` (được cấu hình qua `RedisModule` Global) giúp tăng tốc độ ứng dụng và quản lý queue/session.
-- **Docker Ready:** Có sẵn `docker-compose.yml` để chạy PostgreSQL và Redis chỉ với một câu lệnh.
-- **Phân Quyền (RBAC):** Cung cấp sẵn kiến trúc phân quyền Role-Based Access Control (`Role` enum, `@Roles()` decorator, `RolesGuard`).
-- **Git Hooks (Husky + lint-staged):** Tự động format code bằng Prettier và fix lỗi bằng ESLint trước mỗi lần `git commit`.
-- **Bộ Utilities Phong Phú:** Có sẵn thư mục `src/common/utils/` chứa các hàm tiện ích cực kỳ phổ biến:
-  - `token.util.ts`: Sinh JWT token, Verify JWT, tạo mã OTP, hash mã OTP/Refresh Token.
-  - `password.util.ts`: Hash và kiểm tra mật khẩu với `bcrypt`.
-  - `string.util.ts`: Xoá dấu tiếng Việt, viết hoa chữ cái đầu, validate Email/SĐT.
-  - `date.util.ts`: Thao tác với thời gian (cộng trừ ngày giờ).
-  - `array.util.ts`: Group dữ liệu, loại bỏ phần tử trùng lặp.
-  - `file.util.ts`: Lấy đuôi file, random tên file để upload an toàn.
-  - `crypto.util.ts`: Mã hoá đối xứng AES-256-CBC để lưu trữ các API Key hay cấu hình nhạy cảm.
-  - `pagination.util.ts`: Khung phân trang dữ liệu trả về cho client.
-  - `slug.util.ts`: Tạo URL thân thiện bằng `slugify`.
+- **Database (PostgreSQL + Prisma):** Robust database management with full type-safety using Prisma ORM.
+- **Caching (Redis):** Integrated `ioredis` (configured via a Global `RedisModule`) to boost application speed and manage queues/sessions.
+- **Docker Ready:** A `docker-compose.yml` file is provided to spin up PostgreSQL and Redis with a single command.
+- **Authorization (RBAC):** Built-in Role-Based Access Control scaffolding (`Role` enum, `@Roles()` decorator, `RolesGuard`).
+- **Git Hooks (Husky + lint-staged):** Automatically formats code with Prettier and fixes linting errors with ESLint before every `git commit`.
+- **Rich Utilities Library:** The `src/common/utils/` directory contains highly reusable helper functions:
+  - `token.util.ts`: Generate/Verify JWT tokens, generate OTPs, hash OTPs/Refresh Tokens.
+  - `password.util.ts`: Hash and compare passwords using `bcrypt`.
+  - `string.util.ts`: Remove Vietnamese accents, capitalize letters, validate Emails/Phone numbers.
+  - `date.util.ts`: Time manipulation (add/subtract dates and times).
+  - `array.util.ts`: Group arrays, remove duplicate elements.
+  - `file.util.ts`: Extract file extensions, generate random file names for secure uploads.
+  - `crypto.util.ts`: AES-256-CBC symmetric encryption for storing API Keys or sensitive configurations.
+  - `pagination.util.ts`: Standardized pagination response builder for clients.
+  - `slug.util.ts`: Generate SEO-friendly URLs using `slugify`.
 
-## ⚙️ Yêu Cầu Hệ Thống
+## ⚙️ System Requirements
 
 - Node.js (v20+)
-- pnpm (Khuyến nghị sử dụng pnpm để cài package)
-- Docker & Docker Compose (để chạy database cục bộ)
+- pnpm (Recommended package manager)
+- Docker & Docker Compose (for running local databases)
 
-## 🛠️ Cài Đặt và Khởi Chạy
+## 🛠️ Installation & Setup
 
-### 1. Cài đặt các gói phụ thuộc
+### 1. Install dependencies
 ```bash
 pnpm install
 ```
 
-### 2. Thiết lập biến môi trường
-Mở file `.env` và kiểm tra lại cấu hình. Template đã cung cấp sẵn một file `.env` chuẩn:
+### 2. Environment Variables
+Open the `.env` file and review the configuration. The template provides a standard `.env` file:
 ```env
 PORT=3000
 
@@ -56,50 +56,50 @@ JWT_SECRET="super-secret-jwt-key-change-me"
 JWT_EXPIRES_IN="1d"
 ```
 
-### 3. Khởi động Database & Redis
-Sử dụng Docker để khởi động Postgres và Redis ở chế độ nền:
+### 3. Start Database & Redis
+Use Docker to start Postgres and Redis in the background:
 ```bash
 docker-compose up -d
 ```
 
-### 4. Đồng bộ Schema Database
+### 4. Sync Database Schema
 ```bash
 pnpm exec prisma db push
-# hoặc pnpm exec prisma migrate dev
+# or pnpm exec prisma migrate dev
 ```
 
-### 5. Khởi động ứng dụng NestJS
+### 5. Start the NestJS Application
 ```bash
-# Môi trường phát triển (tự động reload khi có thay đổi)
+# Development environment (auto-reloads on file changes)
 pnpm run start:dev
 ```
 
-Ứng dụng sẽ chạy tại: `http://localhost:3000`.
+The application will be running at: `http://localhost:3000`.
 
-## 📂 Cấu trúc thư mục
+## 📂 Folder Structure
 
 ```
 src/
-├── common/                  # Chứa các thành phần dùng chung toàn cục
-│   ├── decorators/          # Custom decorators (vd: @Roles)
-│   ├── enums/               # Các enum chuẩn (vd: Role)
-│   ├── guards/              # Custom guards (vd: RolesGuard)
-│   └── utils/               # Các file tiện ích (Token, String, Crypto,...)
-├── config/                  # Cấu hình biến môi trường (env.config.ts)
-├── database/                # Modules liên kết CSDL
-│   ├── postgre-sql/         # Prisma Module và Service
-│   └── redis/               # Redis Module và Service (ioredis)
-├── modules/                 # Nơi bạn tạo các domain feature (User, Product,...)
+├── common/                  # Global shared components
+│   ├── decorators/          # Custom decorators (e.g., @Roles)
+│   ├── enums/               # Standard enums (e.g., Role)
+│   ├── guards/              # Custom guards (e.g., RolesGuard)
+│   └── utils/               # Utility functions (Token, String, Crypto, etc.)
+├── config/                  # Environment variables configuration (env.config.ts)
+├── database/                # Database connection modules
+│   ├── postgre-sql/         # Prisma Module and Service
+│   └── redis/               # Redis Module and Service (ioredis)
+├── modules/                 # Domain feature modules (User, Product, etc.)
 ├── app.controller.ts
-├── app.module.ts            # Root module
-└── main.ts                  # Điểm khởi chạy của ứng dụng
+├── app.module.ts            # Root application module
+└── main.ts                  # Application entry point
 ```
 
-## 📝 Script hữu ích
+## 📝 Useful Scripts
 
-- `pnpm run format`: Format lại toàn bộ code với Prettier.
-- `pnpm run lint`: Chạy ESLint để check và tự động sửa lỗi.
-- `pnpm run build`: Build project ra thư mục `dist` để chạy Production.
+- `pnpm run format`: Format the entire codebase using Prettier.
+- `pnpm run lint`: Run ESLint to check and automatically fix code style issues.
+- `pnpm run build`: Build the project into the `dist` directory for Production deployment.
 
 ---
-*Mẫu dự án này được thiết kế theo nguyên tắc Sạch (Clean) và Dễ bảo trì. Bạn có thể xóa bỏ hoặc thêm bớt các module trong `src` tùy theo nhu cầu thực tế của dự án.*
+*This template is designed following Clean Architecture and maintainability principles. You can freely add or remove modules in the `src` directory according to your project's specific needs.*
