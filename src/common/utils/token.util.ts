@@ -20,7 +20,10 @@ export const hashToken = async (token: string): Promise<string> => {
 /**
  * Compare a plain token with a hashed token
  */
-export const compareToken = async (token: string, hash: string): Promise<boolean> => {
+export const compareToken = async (
+  token: string,
+  hash: string,
+): Promise<boolean> => {
   return bcrypt.compare(token, hash);
 };
 
@@ -34,6 +37,24 @@ export const generateNumericOTP = (length: number = 6): string => {
     otp += digits[Math.floor(Math.random() * 10)];
   }
   return otp;
+};
+
+/**
+ * Hash an OTP using bcrypt (for securely storing OTPs in database)
+ */
+export const hashOTP = async (otp: string): Promise<string> => {
+  const salt = await bcrypt.genSalt(10);
+  return bcrypt.hash(otp, salt);
+};
+
+/**
+ * Compare a plain OTP with a hashed OTP
+ */
+export const compareOTP = async (
+  otp: string,
+  hash: string,
+): Promise<boolean> => {
+  return bcrypt.compare(otp, hash);
 };
 
 /**
@@ -57,4 +78,3 @@ export const verifyJwt = <T>(
 ): T => {
   return jwt.verify(token, secret, options) as T;
 };
-

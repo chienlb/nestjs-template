@@ -1,98 +1,105 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Template Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Mẫu dự án (Template) xây dựng trên nền tảng [NestJS](https://nestjs.com/) phiên bản mới nhất, được cấu hình sẵn các công cụ, thư viện và kiến trúc tốt nhất để bạn có thể bắt tay ngay vào việc phát triển tính năng.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Tính Năng Tích Hợp (Features)
 
-## Description
+Template này đã được setup sẵn các module và công cụ sau:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Database (PostgreSQL + Prisma):** Quản lý cơ sở dữ liệu mạnh mẽ, có type-safe với Prisma ORM.
+- **Caching (Redis):** Tích hợp sẵn `ioredis` (được cấu hình qua `RedisModule` Global) giúp tăng tốc độ ứng dụng và quản lý queue/session.
+- **Docker Ready:** Có sẵn `docker-compose.yml` để chạy PostgreSQL và Redis chỉ với một câu lệnh.
+- **Phân Quyền (RBAC):** Cung cấp sẵn kiến trúc phân quyền Role-Based Access Control (`Role` enum, `@Roles()` decorator, `RolesGuard`).
+- **Git Hooks (Husky + lint-staged):** Tự động format code bằng Prettier và fix lỗi bằng ESLint trước mỗi lần `git commit`.
+- **Bộ Utilities Phong Phú:** Có sẵn thư mục `src/common/utils/` chứa các hàm tiện ích cực kỳ phổ biến:
+  - `token.util.ts`: Sinh JWT token, Verify JWT, tạo mã OTP, hash mã OTP/Refresh Token.
+  - `password.util.ts`: Hash và kiểm tra mật khẩu với `bcrypt`.
+  - `string.util.ts`: Xoá dấu tiếng Việt, viết hoa chữ cái đầu, validate Email/SĐT.
+  - `date.util.ts`: Thao tác với thời gian (cộng trừ ngày giờ).
+  - `array.util.ts`: Group dữ liệu, loại bỏ phần tử trùng lặp.
+  - `file.util.ts`: Lấy đuôi file, random tên file để upload an toàn.
+  - `crypto.util.ts`: Mã hoá đối xứng AES-256-CBC để lưu trữ các API Key hay cấu hình nhạy cảm.
+  - `pagination.util.ts`: Khung phân trang dữ liệu trả về cho client.
+  - `slug.util.ts`: Tạo URL thân thiện bằng `slugify`.
 
-## Project setup
+## ⚙️ Yêu Cầu Hệ Thống
 
+- Node.js (v20+)
+- pnpm (Khuyến nghị sử dụng pnpm để cài package)
+- Docker & Docker Compose (để chạy database cục bộ)
+
+## 🛠️ Cài Đặt và Khởi Chạy
+
+### 1. Cài đặt các gói phụ thuộc
 ```bash
-$ pnpm install
+pnpm install
 ```
 
-## Compile and run the project
+### 2. Thiết lập biến môi trường
+Mở file `.env` và kiểm tra lại cấu hình. Template đã cung cấp sẵn một file `.env` chuẩn:
+```env
+PORT=3000
 
-```bash
-# development
-$ pnpm run start
+# Database
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5433
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=123456
+POSTGRES_DB=nestjs_template
+DATABASE_URL=postgresql://postgres:123456@localhost:5433/nestjs_template?schema=public
 
-# watch mode
-$ pnpm run start:dev
+# Redis
+REDIS_PORT=6379
 
-# production mode
-$ pnpm run start:prod
+# JWT
+JWT_SECRET="super-secret-jwt-key-change-me"
+JWT_EXPIRES_IN="1d"
 ```
 
-## Run tests
-
+### 3. Khởi động Database & Redis
+Sử dụng Docker để khởi động Postgres và Redis ở chế độ nền:
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+docker-compose up -d
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### 4. Đồng bộ Schema Database
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm exec prisma db push
+# hoặc pnpm exec prisma migrate dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 5. Khởi động ứng dụng NestJS
+```bash
+# Môi trường phát triển (tự động reload khi có thay đổi)
+pnpm run start:dev
+```
 
-## Resources
+Ứng dụng sẽ chạy tại: `http://localhost:3000`.
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📂 Cấu trúc thư mục
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+src/
+├── common/                  # Chứa các thành phần dùng chung toàn cục
+│   ├── decorators/          # Custom decorators (vd: @Roles)
+│   ├── enums/               # Các enum chuẩn (vd: Role)
+│   ├── guards/              # Custom guards (vd: RolesGuard)
+│   └── utils/               # Các file tiện ích (Token, String, Crypto,...)
+├── config/                  # Cấu hình biến môi trường (env.config.ts)
+├── database/                # Modules liên kết CSDL
+│   ├── postgre-sql/         # Prisma Module và Service
+│   └── redis/               # Redis Module và Service (ioredis)
+├── modules/                 # Nơi bạn tạo các domain feature (User, Product,...)
+├── app.controller.ts
+├── app.module.ts            # Root module
+└── main.ts                  # Điểm khởi chạy của ứng dụng
+```
 
-## Support
+## 📝 Script hữu ích
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `pnpm run format`: Format lại toàn bộ code với Prettier.
+- `pnpm run lint`: Chạy ESLint để check và tự động sửa lỗi.
+- `pnpm run build`: Build project ra thư mục `dist` để chạy Production.
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+*Mẫu dự án này được thiết kế theo nguyên tắc Sạch (Clean) và Dễ bảo trì. Bạn có thể xóa bỏ hoặc thêm bớt các module trong `src` tùy theo nhu cầu thực tế của dự án.*
