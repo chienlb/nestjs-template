@@ -8,6 +8,11 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { RedisModule } from './database/redis/redis.module';
 import { CustomThrottlerGuard } from './common/guards/throttler.guard';
+import { UploadModule } from './modules/upload/upload.module';
+import { CacheModule } from './common/cache/cache.module';
+import { MailModule } from './modules/mail/mail.module';
+import { HealthModule } from './modules/health/health.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -23,6 +28,11 @@ import { CustomThrottlerGuard } from './common/guards/throttler.guard';
     ]),
     PrismaModule,
     RedisModule,
+    UploadModule,
+    CacheModule,
+    MailModule,
+    HealthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

@@ -5,6 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import helmet from 'helmet';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+// import { doubleCsrf } from 'csrf-csrf';
+import { SanitizePipe } from './common/pipes/sanitize.pipe';
 
 async function bootstrap() {
   const logger = new Logger('Server');
@@ -14,15 +19,53 @@ async function bootstrap() {
     // Enable shutdown hooks for graceful shutdown (like closing database pool)
     app.enableShutdownHooks();
 
-    // 1. Enable CORS
+    const configService = app.get(ConfigService);
+    const port = configService.get<number>('port') || 3000;
+    const corsOrigins = configService.get<string[]>('security.corsOrigins') || [
+      '*',
+    ];
+    const csrfSecret =
+      configService.get<string>('security.csrfSecret') || 'default-csrf-secret';
+
+    // 1. HTTP Security Headers (Helmet)
+    app.use(helmet());
+
+    // 2. Compression
+    app.use(compression());
+
+    // 3. Cookie Parser
+    app.use(cookieParser(csrfSecret));
+
+    // 4. Configurable CORS
     app.enableCors({
-      origin: '*',
+      origin:
+        corsOrigins.length === 1 && corsOrigins[0] === '*' ? '*' : corsOrigins,
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
 
-    // 2. Global Validation Pipe
+    // 5. CSRF Protection (Configured, ready for cookie-based sessions)
+    // To enable, uncomment the block below:
+    // const { doubleCsrfProtection } = doubleCsrf({
+    //   getSecret: () => csrfSecret,
+    //   cookieName: 'x-csrf-token',
+    //   cookieOptions: {
+    //     sameSite: 'lax',
+    //     path: '/',
+    //     secure: process.env.NODE_ENV === 'production',
+    //   },
+    //   size: 64,
+    //   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
+    //   getCsrfTokenFromRequest: (req) => req.headers['x-csrf-token'] as string,
+    //   getSessionIdentifier: (req) => {
+    //     return (req.headers['authorization'] as string) || req.ip || '';
+    //   },
+    // });
+    // app.use(doubleCsrfProtection);
+
+    // 6. Global Validation and Sanitization Pipes
     app.useGlobalPipes(
+      new SanitizePipe(),
       new ValidationPipe({
         whitelist: true,
         transform: true,
@@ -42,9 +85,6 @@ async function bootstrap() {
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document);
-
-    const configService = app.get(ConfigService);
-    const port = configService.get<number>('port') || 3000;
 
     await app.listen(port);
 

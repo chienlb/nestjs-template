@@ -100,6 +100,7 @@ src/
 - `pnpm run format`: Format the entire codebase using Prettier.
 - `pnpm run lint`: Run ESLint to check and automatically fix code style issues.
 - `pnpm run build`: Build the project into the `dist` directory for Production deployment.
+- `pnpm g:module <name>`: Generate a new NestJS feature module complete with its own Module, Controller, Service, Repository, and Create/Update DTO files.
 
 ---
 *This template is designed following Clean Architecture and maintainability principles. You can freely add or remove modules in the `src` directory according to your project's specific needs.*
