@@ -16,21 +16,41 @@ export default () => ({
     expiresIn: process.env.JWT_EXPIRES_IN || '1d',
   },
   r2: {
-    accountId: process.env.CLOUDFLARE_R2_ACCOUNT_ID || '',
-    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY || '',
-    bucketName: process.env.CLOUDFLARE_R2_BUCKET_NAME || '',
-    publicUrl: process.env.CLOUDFLARE_R2_PUBLIC_URL || '',
+    accountId:
+      process.env.CLOUDFLARE_R2_ACCOUNT_ID || process.env.R2_ACCOUNT_ID || '',
+    accessKeyId:
+      process.env.CLOUDFLARE_R2_ACCESS_KEY_ID ||
+      process.env.R2_ACCESS_KEY_ID ||
+      '',
+    secretAccessKey:
+      process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ||
+      process.env.R2_SECRET_ACCESS_KEY ||
+      '',
+    bucketName:
+      process.env.CLOUDFLARE_R2_BUCKET_NAME || process.env.R2_BUCKET || '',
+    publicUrl:
+      process.env.CLOUDFLARE_R2_PUBLIC_URL || process.env.R2_PUBLIC_BASE || '',
   },
   mail: {
-    host: process.env.MAIL_HOST || 'smtp.example.com',
+    host:
+      process.env.MAIL_HOST ||
+      (process.env.EMAIL_USER?.includes('gmail')
+        ? 'smtp.gmail.com'
+        : 'smtp.example.com'),
     port: parseInt(process.env.MAIL_PORT || '587', 10),
-    user: process.env.MAIL_USER || '',
-    pass: process.env.MAIL_PASS || '',
-    from: process.env.MAIL_FROM || '"NestJS Template" <noreply@example.com>',
+    user: process.env.MAIL_USER || process.env.EMAIL_USER || '',
+    pass: process.env.MAIL_PASS || process.env.EMAIL_PASS || '',
+    from:
+      process.env.MAIL_FROM ||
+      `"${process.env.EMAIL_USER || 'NestJS Template'}" <${process.env.MAIL_USER || process.env.EMAIL_USER || 'noreply@example.com'}>`,
   },
   security: {
     corsOrigins: (process.env.CORS_ORIGINS || '*').split(','),
     csrfSecret: process.env.CSRF_SECRET || 'csrf-super-secret-key-change-me',
+  },
+  firebase: {
+    projectId: process.env.FIREBASE_PROJECT_ID || '',
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',
+    privateKey: process.env.FIREBASE_PRIVATE_KEY || '',
   },
 });

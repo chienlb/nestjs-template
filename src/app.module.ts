@@ -14,6 +14,9 @@ import { MailModule } from './modules/mail/mail.module';
 import { HealthModule } from './modules/health/health.module';
 import { UserModule } from './modules/user/user.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
+import { AuditLogModule } from './modules/audit-log/audit-log.module';
+import { FcmModule } from './modules/fcm/fcm.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -35,6 +38,9 @@ import { WebsocketModule } from './modules/websocket/websocket.module';
     HealthModule,
     UserModule,
     WebsocketModule,
+    AuditLogModule,
+    FcmModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

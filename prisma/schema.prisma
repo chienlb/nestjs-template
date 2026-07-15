@@ -21,5 +21,33 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  devices   UserDevice[]
+  auditLogs AuditLog[]
+
   @@map("users")
+}
+
+model UserDevice {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token      String   @unique
+  deviceType String?  // e.g. "ios", "android", "web"
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("user_devices")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   // e.g. "SEND_FCM_NOTIFICATION", "USER_LOGIN"
+  details   Json     // stores dynamic log data
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
 }
