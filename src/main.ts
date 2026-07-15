@@ -10,6 +10,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 // import { doubleCsrf } from 'csrf-csrf';
 import { SanitizePipe } from './common/pipes/sanitize.pipe';
+import { SocketIoAdapter } from './common/adapters/socket-io.adapter';
 
 async function bootstrap() {
   const logger = new Logger('Server');
@@ -18,6 +19,9 @@ async function bootstrap() {
 
     // Enable shutdown hooks for graceful shutdown (like closing database pool)
     app.enableShutdownHooks();
+
+    // Register WebSocket adapter
+    app.useWebSocketAdapter(new SocketIoAdapter(app));
 
     const configService = app.get(ConfigService);
     const port = configService.get<number>('port') || 3000;

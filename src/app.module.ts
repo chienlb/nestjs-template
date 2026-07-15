@@ -13,6 +13,7 @@ import { CacheModule } from './common/cache/cache.module';
 import { MailModule } from './modules/mail/mail.module';
 import { HealthModule } from './modules/health/health.module';
 import { UserModule } from './modules/user/user.module';
+import { WebsocketModule } from './modules/websocket/websocket.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UserModule } from './modules/user/user.module';
     MailModule,
     HealthModule,
     UserModule,
+    WebsocketModule,
   ],
   controllers: [AppController],
   providers: [
