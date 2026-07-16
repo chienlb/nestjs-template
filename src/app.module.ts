@@ -17,7 +17,6 @@ import { WebsocketModule } from './modules/websocket/websocket.module';
 import { AuditLogModule } from './modules/audit-log/audit-log.module';
 import { FcmModule } from './modules/fcm/fcm.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { SettingsModule } from './modules/settings/settings.module';
 
 @Module({
   imports: [
@@ -42,7 +41,6 @@ import { SettingsModule } from './modules/settings/settings.module';
     AuditLogModule,
     FcmModule,
     AuthModule,
-    SettingsModule,
   ],
   controllers: [AppController],
   providers: [
