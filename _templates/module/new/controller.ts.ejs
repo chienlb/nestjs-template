@@ -1,0 +1,56 @@
+---
+to: src/modules/<%= name %>/<%= name %>.controller.ts
+---
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+<% const pascal = name.charAt(0).toUpperCase() + name.slice(1); %>
+import { <%= pascal %>Service } from './<%= name %>.service';
+import { Create<%= pascal %>Dto } from './dto/create.dto';
+import { Update<%= pascal %>Dto } from './dto/update.dto';
+
+@ApiTags('<%= pascal %>s')
+@Controller('<%= name %>s')
+export class <%= pascal %>Controller {
+  constructor(private readonly <%= name %>Service: <%= pascal %>Service) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Create a new <%= pascal %>' })
+  @ApiResponse({ status: 201, description: 'Created successfully' })
+  create(@Body() create<%= pascal %>Dto: Create<%= pascal %>Dto) {
+    return this.<%= name %>Service.create(create<%= pascal %>Dto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Retrieve list of all <%= pascal %>s' })
+  @ApiResponse({ status: 200, description: 'List of records retrieved successfully' })
+  findAll() {
+    return this.<%= name %>Service.findAll();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get <%= pascal %> by ID' })
+  @ApiParam({ name: 'id', description: '<%= pascal %> ID' })
+  @ApiResponse({ status: 200, description: 'Record details' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  findOne(@Param('id') id: string) {
+    return this.<%= name %>Service.findById(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update <%= pascal %> by ID' })
+  @ApiParam({ name: 'id', description: '<%= pascal %> ID' })
+  @ApiResponse({ status: 200, description: 'Updated successfully' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  update(@Param('id') id: string, @Body() update<%= pascal %>Dto: Update<%= pascal %>Dto) {
+    return this.<%= name %>Service.update(id, update<%= pascal %>Dto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete <%= pascal %> by ID' })
+  @ApiParam({ name: 'id', description: '<%= pascal %> ID' })
+  @ApiResponse({ status: 200, description: 'Deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  remove(@Param('id') id: string) {
+    return this.<%= name %>Service.delete(id);
+  }
+}

@@ -1,0 +1,19 @@
+---
+to: src/modules/<%= name %>/dto/query.dto.ts
+---
+import { IsOptional, IsString, IsNumber } from 'class-validator';
+
+<% const pascal = name.charAt(0).toUpperCase() + name.slice(1); %>
+export class <%= pascal %>QueryDto {
+  @IsOptional()
+  @IsString()
+  search?: string;
+
+  @IsOptional()
+  @IsNumber()
+  page?: number;
+
+  @IsOptional()
+  @IsNumber()
+  limit?: number;
+}

@@ -1,0 +1,17 @@
+---
+to: src/modules/<%= name %>/<%= name %>.module.ts
+---
+import { Module } from '@nestjs/common';
+import { PrismaModule } from '../../database/postgre-sql/prisma.module';
+<% const pascal = name.charAt(0).toUpperCase() + name.slice(1); %>
+import { <%= pascal %>Controller } from './<%= name %>.controller';
+import { <%= pascal %>Service } from './<%= name %>.service';
+import { <%= pascal %>Repository } from './<%= name %>.repository';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [<%= pascal %>Controller],
+  providers: [<%= pascal %>Service, <%= pascal %>Repository],
+  exports: [<%= pascal %>Service, <%= pascal %>Repository],
+})
+export class <%= pascal %>Module {}

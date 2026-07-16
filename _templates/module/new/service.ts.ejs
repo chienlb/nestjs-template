@@ -1,0 +1,39 @@
+---
+to: src/modules/<%= name %>/<%= name %>.service.ts
+---
+import { Injectable, NotFoundException } from '@nestjs/common';
+<% const pascal = name.charAt(0).toUpperCase() + name.slice(1); %>
+import { <%= pascal %>Repository } from './<%= name %>.repository';
+import { Create<%= pascal %>Dto } from './dto/create.dto';
+import { Update<%= pascal %>Dto } from './dto/update.dto';
+
+@Injectable()
+export class <%= pascal %>Service {
+  constructor(private readonly <%= name %>Repository: <%= pascal %>Repository) {}
+
+  async create(create<%= pascal %>Dto: Create<%= pascal %>Dto) {
+    return this.<%= name %>Repository.create(create<%= pascal %>Dto);
+  }
+
+  async findById(id: string) {
+    const item = await this.<%= name %>Repository.findById(id);
+    if (!item) {
+      throw new NotFoundException(`Không tìm thấy <%= pascal %> với ID ${id}`);
+    }
+    return item;
+  }
+
+  async update(id: string, update<%= pascal %>Dto: Update<%= pascal %>Dto) {
+    await this.findById(id);
+    return this.<%= name %>Repository.update(id, update<%= pascal %>Dto);
+  }
+
+  async delete(id: string) {
+    await this.findById(id);
+    return this.<%= name %>Repository.delete(id);
+  }
+
+  async findAll() {
+    return this.<%= name %>Repository.findAll();
+  }
+}

@@ -1,0 +1,13 @@
+---
+to: src/modules/<%= name %>/dto/create.dto.ts
+---
+import { IsString, IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+
+<% const pascal = name.charAt(0).toUpperCase() + name.slice(1); %>
+export class Create<%= pascal %>Dto {
+  @ApiProperty({ example: 'Sample Name', description: 'Display name' })
+  @IsString({ message: 'Phải là chuỗi' })
+  @IsNotEmpty({ message: 'Không được để trống' })
+  name: string;
+}

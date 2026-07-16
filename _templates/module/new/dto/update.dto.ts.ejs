@@ -1,0 +1,8 @@
+---
+to: src/modules/<%= name %>/dto/update.dto.ts
+---
+import { PartialType } from '@nestjs/swagger';
+import { Create<%= name.charAt(0).toUpperCase() + name.slice(1) %>Dto } from './create.dto';
+
+<% const pascal = name.charAt(0).toUpperCase() + name.slice(1); %>
+export class Update<%= pascal %>Dto extends PartialType(Create<%= pascal %>Dto) {}
