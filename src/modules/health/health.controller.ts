@@ -3,6 +3,27 @@ import { HealthService } from './health.service';
 import type { Response } from 'express';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+export type HealthStatus = 'healthy' | 'degraded' | 'unhealthy';
+export type HealthDetails = {
+  database: {
+    status: HealthStatus;
+    error?: string;
+  };
+  redis: {
+    status: HealthStatus;
+    error?: string;
+  };
+  storage: {
+    status: HealthStatus;
+    error?: string;
+  };
+};
+
+export type HealthResponse = {
+  status: 'healthy' | 'degraded' | 'unhealthy';
+  details: HealthDetails;
+};
+
 @ApiTags('Health Check')
 @Controller('health')
 export class HealthController {
@@ -79,7 +100,7 @@ export class HealthController {
   async check(@Res() res: Response) {
     const health = await this.healthService.checkHealth();
 
-    if (health.status === 'ok') {
+    if (health.status === 'healthy') {
       return res.status(HttpStatus.OK).json(health);
     }
 
