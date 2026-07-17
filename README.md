@@ -76,6 +76,19 @@ pnpm run start:dev
 
 The application will be running at: `http://localhost:3000`.
 
+## 📖 Feature Documentation (Tài Liệu Chức Năng)
+
+Detailed, comprehensive documentation files for each domain module are available in Vietnamese under the `docs/` folder:
+
+- **[Xác Thực & Phân Quyền (Auth & RBAC)](./docs/auth.md)**: JWT authorization flow, signup, login, profile query, and roles guard.
+- **[Quản Lý Người Dùng (User CRUD)](./docs/user.md)**: User creation, details query, modifications, deletion, and validation DTOs.
+- **[Tải Lên Tập Tin (File Upload R2/S3)](./docs/upload.md)**: Cloudflare R2 bucket integration, file naming, and uploads.
+- **[Thông Báo Đẩy (Firebase FCM)](./docs/fcm.md)**: Device token registration, parallel push sending, and mock mode fallback.
+- **[Dịch Vụ Gửi Email (Mail Nodemailer)](./docs/mail.md)**: SMTP credentials configuration, dynamic HTML body sending, and test script.
+- **[Kiểm Tra Sức Khỏe Hệ Thống (Health Checks)](./docs/health.md)**: Parallel healthchecks checkDatabase, checkRedis, checkStorage, and status JSON.
+- **[Nhật Ký Hoạt Động (Audit Logs)](./docs/audit-log.md)**: Activity database logging for security tracking and error lookup.
+- **[Kết Nối Real-time (WebSockets)](./docs/websocket.md)**: Socket.io real-time chat gateway, personal rooms, and broadcasts.
+
 ## 📂 Folder Structure
 
 ```

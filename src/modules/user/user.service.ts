@@ -55,6 +55,13 @@ export class UserService {
   }
 
   /**
+   * Find raw user by ID (useful for internal auth operations)
+   */
+  async findRawById(id: string): Promise<User | null> {
+    return this.userRepository.findById(id);
+  }
+
+  /**
    * Update user info, hashes password if updated
    */
   async update(

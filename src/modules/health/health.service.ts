@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../database/postgre-sql/prisma.service';
 import { RedisService } from '../../database/redis/redis.service';
 import { UploadService } from '../upload/upload.service';
+import { HealthStatus, HealthResponse } from './health.controller';
 
 @Injectable()
 export class HealthService {
@@ -16,20 +17,21 @@ export class HealthService {
   /**
    * Run health checks in parallel across core dependencies
    */
-  async checkHealth() {
+  async checkHealth(): Promise<HealthResponse> {
     const [db, redis, storage] = await Promise.all([
       this.checkDatabase(),
       this.checkRedis(),
       this.checkStorage(),
     ]);
 
-    // Storage status of 'unconfigured' does not fail the overall application health
-    const overallStatus =
-      db.status === 'up' &&
-      redis.status === 'up' &&
-      (storage.status === 'up' || storage.status === 'unconfigured')
-        ? 'ok'
-        : 'error';
+    // Overall status is 'healthy' if all core components are healthy
+    // It is 'degraded' if db/redis are healthy but storage is unhealthy (or config missing, depending on needs. If config is 'unconfigured', we treat it as healthy)
+    const overallStatus: HealthStatus =
+      db.status === 'healthy' && redis.status === 'healthy'
+        ? storage.status === 'healthy'
+          ? 'healthy'
+          : 'degraded'
+        : 'unhealthy';
 
     return {
       status: overallStatus,
@@ -42,36 +44,49 @@ export class HealthService {
   }
 
   private async checkDatabase(): Promise<{
-    status: 'up' | 'down';
+    status: HealthStatus;
     error?: string;
   }> {
     try {
       await this.prismaService.$queryRawUnsafe('SELECT 1');
-      return { status: 'up' };
+      return { status: 'healthy' };
     } catch (error) {
       this.logger.error(
         `Database health check failed: ${(error as Error).message}`,
       );
-      return { status: 'down', error: (error as Error).message };
+      return { status: 'unhealthy', error: (error as Error).message };
     }
   }
 
   private async checkRedis(): Promise<{
-    status: 'up' | 'down';
+    status: HealthStatus;
     error?: string;
   }> {
     try {
       await this.redisService.client.ping();
-      return { status: 'up' };
+      return { status: 'healthy' };
     } catch (error) {
       this.logger.error(
         `Redis health check failed: ${(error as Error).message}`,
       );
-      return { status: 'down', error: (error as Error).message };
+      return { status: 'unhealthy', error: (error as Error).message };
     }
   }
 
-  private async checkStorage() {
-    return this.uploadService.checkHealth();
+  private async checkStorage(): Promise<{
+    status: HealthStatus;
+    error?: string;
+  }> {
+    const r2Health = await this.uploadService.checkHealth();
+
+    let status: HealthStatus = 'unhealthy';
+    if (r2Health.status === 'up' || r2Health.status === 'unconfigured') {
+      status = 'healthy';
+    }
+
+    return {
+      status,
+      error: r2Health.error,
+    };
   }
 }
